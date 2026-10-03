@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cozinha</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="texto1">
+        <h1>Cozinha</h1>
+        <p>Pedidos</p>
+    </div>
+
+    <hr>
+
+    <div class="cozinha">
+
+        <!-- NOVOS PEDIDOS -->
+        <div class="coluna">
+            <h2>Novos pedidos</h2>
+
+            <div id="novos"></div>
+        </div>
+
+
+        <!-- EM PREPARO -->
+        <div class="coluna">
+            <h2>Em preparo</h2>
+
+            <div id="preparo"></div>
+        </div>
+
+
+        <!-- PREPARADOS -->
+        <div class="coluna">
+            <h2>Preparados</h2>
+
+            <div id="preparados"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function mostrarPedidos() {
+
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+            const novos = document.getElementById("novos");
+            const preparo = document.getElementById("preparo");
+            const preparados = document.getElementById("preparados");
+
+            novos.innerHTML = "";
+            preparo.innerHTML = "";
+            preparados.innerHTML = "";
+
+
+            pedidos.forEach((pedido, index) => {
+
+                const card = document.createElement("div");
+
+                card.className = "pedido";
+
+
+                let conteudo = `
+                    <h3>Pedido #${index + 1}</h3>
+
+                    <p><strong>${pedido.combo}</strong></p>
+                `;
+
+
+                if (pedido.sabor1) {
+                    conteudo += `
+                        <p>Sabor 1: ${pedido.sabor1}</p>
+                    `;
+                }
+
+
+                if (pedido.sabor2) {
+                    conteudo += `
+                        <p>Sabor 2: ${pedido.sabor2}</p>
+                    `;
+                }
+
+
+                if (pedido.descricao) {
+                    conteudo += `
+                        <p>Descrição: ${pedido.descricao}</p>
+                    `;
+                }
+
+
+                if (pedido.status === "novo") {
+
+                    conteudo += `
+                        <button onclick="preparar(${index})">
+                            Começar preparo
+                        </button>
+                    `;
+
+                    card.innerHTML = conteudo;
+
+                    novos.appendChild(card);
+
+                }
+
+
+                else if (pedido.status === "preparo") {
+
+                    conteudo += `
+                        <button onclick="finalizar(${index})">
+                            Marcar como preparado
+                        </button>
+                    `;
+
+                    card.innerHTML = conteudo;
+
+                    preparo.appendChild(card);
+
+                }
+
+
+                else if (pedido.status === "preparado") {
+
+                    conteudo += `
+                        <p class="pronto">✓ Pedido pronto</p>
+                    `;
+
+                    card.innerHTML = conteudo;
+
+                    preparados.appendChild(card);
+
+                }
+
+            });
+
+        }
+
+
+        function preparar(index) {
+
+            const pedidos =
+                JSON.parse(localStorage.getItem("pedidos")) || [];
+
+            pedidos[index].status = "preparo";
+
+            localStorage.setItem(
+                "pedidos",
+                JSON.stringify(pedidos)
+            );
+
+            mostrarPedidos();
+
+        }
+
+
+        function finalizar(index) {
+
+            const pedidos =
+                JSON.parse(localStorage.getItem("pedidos")) || [];
+
+            pedidos[index].status = "preparado";
+
+            localStorage.setItem(
+                "pedidos",
+                JSON.stringify(pedidos)
+            );
+
+            mostrarPedidos();
+
+        }
+
+
+        // Carrega os pedidos quando abrir a cozinha
+        mostrarPedidos();
+
+
+        // Atualiza a cozinha automaticamente
+        setInterval(mostrarPedidos, 1000);
+
+    </script>
+
+</body>
+</html>

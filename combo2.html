@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combo 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="texto1">
+        <h1>Combo 2</h1>
+        <p>2 Bolas de sorvete</p>
+    </div>
+
+    <hr>
+    <br>
+
+    <div class="fundo">
+        <br>
+
+      <form id="formPedido">
+
+    <h3>Sabores</h3>
+
+    <p>Escolha o primeiro sabor:</p>
+
+    <input type="radio" id="cafe1" name="sabor1" value="Café" required>
+    <label for="cafe1">Café</label><br><br>
+
+    <input type="radio" id="creme1" name="sabor1" value="Creme">
+    <label for="creme1">Creme</label><br><br>
+
+    <input type="radio" id="docedeleite1" name="sabor1" value="Doce de leite">
+    <label for="docedeleite1">Doce de leite</label>
+
+    <br><br>
+
+    <hr>
+
+    <p>Escolha o segundo sabor:</p>
+
+    <input type="radio" id="cafe2" name="sabor2" value="Café" required>
+    <label for="cafe2">Café</label><br><br>
+
+    <input type="radio" id="creme2" name="sabor2" value="Creme">
+    <label for="creme2">Creme</label><br><br>
+
+    <input type="radio" id="docedeleite2" name="sabor2" value="Doce de leite">
+    <label for="docedeleite2">Doce de leite</label>
+
+    <br><br>
+
+    <hr>
+
+    <h3>Descrição</h3>
+
+    <textarea
+        id="descricao"
+        name="descricao"
+        placeholder="Descrição"
+    ></textarea>
+
+    <div class="menubuttons">
+        <button type="submit">Enviar</button>
+    </div>
+
+</form>
+
+
+<script>
+
+document.getElementById("formPedido").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const sabor1 =
+        document.querySelector('input[name="sabor1"]:checked').value;
+
+    const sabor2 =
+        document.querySelector('input[name="sabor2"]:checked').value;
+
+    const descricao =
+        document.getElementById("descricao").value;
+
+
+    const pedido = {
+
+        combo: "Combo 2",
+
+        sabor1: sabor1,
+
+        sabor2: sabor2,
+
+        descricao: descricao,
+
+        status: "novo"
+
+    };
+
+
+    const pedidos =
+        JSON.parse(localStorage.getItem("pedidos")) || [];
+
+
+    pedidos.push(pedido);
+
+
+    localStorage.setItem(
+        "pedidos",
+        JSON.stringify(pedidos)
+    );
+
+
+    window.location.href = "cozinha.html";
+
+});
+
+</script>
+
+    </div>
+
+</body>
+
+</html>

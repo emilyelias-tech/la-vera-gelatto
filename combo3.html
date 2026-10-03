@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>combo 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="texto1">
+        <h1>Combo 1</h1>
+        <p>Afogatto com sorvete de creme</p>
+    </div>
+    <hr>
+<br><br><br>
+
+    <div class="fundo">
+
+   <form id="formPedido">
+
+    <h3>Descrição</h3>
+
+    <textarea
+        id="descricao"
+        name="descricao"
+        placeholder="Descrição"
+    ></textarea>
+
+    <div class="menubuttons">
+        <button type="submit">Enviar</button>
+    </div>
+
+</form>
+
+
+<script>
+
+document.getElementById("formPedido").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const descricao =
+        document.getElementById("descricao").value;
+
+
+    const pedido = {
+
+        combo: "Combo 3 - Afogatto com sorvete de creme",
+
+        descricao: descricao,
+
+        status: "novo"
+
+    };
+
+
+    const pedidos =
+        JSON.parse(localStorage.getItem("pedidos")) || [];
+
+
+    pedidos.push(pedido);
+
+
+    localStorage.setItem(
+        "pedidos",
+        JSON.stringify(pedidos)
+    );
+
+
+    window.location.href = "cozinha.html";
+
+});
+
+</script>
+    </div>
+</body>
+</html>
