@@ -88,38 +88,27 @@
 
             event.preventDefault();
 
-            const sabor =
-                document.querySelector('input[name="sabor"]:checked').value;
+            const saborSelecionado = document.querySelector('input[name="sabor"]:checked');
 
-            const descricao =
-                document.getElementById("descricao").value;
+            if (!saborSelecionado) {
+                alert("Por favor, selecione um sabor!");
+                return;
+            }
 
+            const descricao = document.getElementById("descricao").value;
 
             const pedido = {
-
                 combo: "Combo 1",
-
-                sabor1: sabor,
-
+                sabor1: saborSelecionado.value,
                 descricao: descricao,
-
                 status: "novo"
-
             };
 
-
-            const pedidos =
-                JSON.parse(localStorage.getItem("pedidos")) || [];
-
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
 
             pedidos.push(pedido);
 
-
-            localStorage.setItem(
-                "pedidos",
-                JSON.stringify(pedidos)
-            );
-
+            localStorage.setItem("pedidos", JSON.stringify(pedidos));
 
             window.location.href = "cozinha.html";
 

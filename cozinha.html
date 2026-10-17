@@ -20,31 +20,27 @@
 
     <div class="cozinha">
 
-        <!-- NOVOS PEDIDOS -->
         <div class="coluna">
             <h2>Novos pedidos</h2>
-
             <div id="novos"></div>
         </div>
 
-
-        <!-- EM PREPARO -->
         <div class="coluna">
             <h2>Em preparo</h2>
-
             <div id="preparo"></div>
         </div>
 
-
-        <!-- PREPARADOS -->
         <div class="coluna">
             <h2>Preparados</h2>
-
             <div id="preparados"></div>
         </div>
 
-    </div>
+        <div class="coluna">
+            <h2>Últimos Pedidos</h2>
+            <div id="concluidos"></div>
+        </div>
 
+    </div>
 
     <script>
 
@@ -55,46 +51,34 @@
             const novos = document.getElementById("novos");
             const preparo = document.getElementById("preparo");
             const preparados = document.getElementById("preparados");
+            const concluidos = document.getElementById("concluidos");
 
             novos.innerHTML = "";
             preparo.innerHTML = "";
             preparados.innerHTML = "";
-
+            concluidos.innerHTML = "";
 
             pedidos.forEach((pedido, index) => {
 
                 const card = document.createElement("div");
-
                 card.className = "pedido";
-
 
                 let conteudo = `
                     <h3>Pedido #${index + 1}</h3>
-
                     <p><strong>${pedido.combo}</strong></p>
                 `;
 
-
                 if (pedido.sabor1) {
-                    conteudo += `
-                        <p>Sabor 1: ${pedido.sabor1}</p>
-                    `;
+                    conteudo += `<p>Sabor 1: ${pedido.sabor1}</p>`;
                 }
-
 
                 if (pedido.sabor2) {
-                    conteudo += `
-                        <p>Sabor 2: ${pedido.sabor2}</p>
-                    `;
+                    conteudo += `<p>Sabor 2: ${pedido.sabor2}</p>`;
                 }
-
 
                 if (pedido.descricao) {
-                    conteudo += `
-                        <p>Descrição: ${pedido.descricao}</p>
-                    `;
+                    conteudo += `<p>Descrição: ${pedido.descricao}</p>`;
                 }
-
 
                 if (pedido.status === "novo") {
 
@@ -103,38 +87,36 @@
                             Começar preparo
                         </button>
                     `;
-
                     card.innerHTML = conteudo;
-
                     novos.appendChild(card);
 
-                }
-
-
-                else if (pedido.status === "preparo") {
+                } else if (pedido.status === "preparo") {
 
                     conteudo += `
                         <button onclick="finalizar(${index})">
                             Marcar como preparado
                         </button>
                     `;
-
                     card.innerHTML = conteudo;
-
                     preparo.appendChild(card);
 
-                }
-
-
-                else if (pedido.status === "preparado") {
+                } else if (pedido.status === "preparado") {
 
                     conteudo += `
-                        <p class="pronto">✓ Pedido pronto</p>
+                        <button onclick="arquivar(${index})">
+                            Mover para Concluídos
+                        </button>
                     `;
-
                     card.innerHTML = conteudo;
-
                     preparados.appendChild(card);
+
+                } else if (pedido.status === "concluido") {
+
+                    conteudo += `
+                        <p class="pronto">✓ Pedido entregue</p>
+                    `;
+                    card.innerHTML = conteudo;
+                    concluidos.appendChild(card);
 
                 }
 
@@ -142,47 +124,30 @@
 
         }
 
-
         function preparar(index) {
-
-            const pedidos =
-                JSON.parse(localStorage.getItem("pedidos")) || [];
-
-            pedidos[index].status = "preparo";
-
-            localStorage.setItem(
-                "pedidos",
-                JSON.stringify(pedidos)
-            );
-
-            mostrarPedidos();
-
+            atualizarStatus(index, "preparo");
         }
-
 
         function finalizar(index) {
-
-            const pedidos =
-                JSON.parse(localStorage.getItem("pedidos")) || [];
-
-            pedidos[index].status = "preparado";
-
-            localStorage.setItem(
-                "pedidos",
-                JSON.stringify(pedidos)
-            );
-
-            mostrarPedidos();
-
+            atualizarStatus(index, "preparado");
         }
 
+        function arquivar(index) {
+            atualizarStatus(index, "concluido");
+        }
 
-        // Carrega os pedidos quando abrir a cozinha
+        function atualizarStatus(index, novoStatus) {
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+            pedidos[index].status = novoStatus;
+            localStorage.setItem("pedidos", JSON.stringify(pedidos));
+            mostrarPedidos();
+        }
+
+        // Atualiza a lista quando a aba for carregada ou quando houver alteração
         mostrarPedidos();
 
-
-        // Atualiza a cozinha automaticamente
-        setInterval(mostrarPedidos, 1000);
+        // Atualiza automaticamente quando houver novas alterações no mesmo navegador
+        window.addEventListener("storage", mostrarPedidos);
 
     </script>
 
